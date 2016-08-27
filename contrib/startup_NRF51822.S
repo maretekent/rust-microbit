@@ -68,64 +68,6 @@ __HeapBase:
 __HeapLimit:
     .size __HeapLimit, . - __HeapLimit
     
-    .section .Vectors
-    .align 2
-    .globl __Vectors
-__Vectors:
-    .long    __StackTop            /* Top of Stack */
-    .long   Reset_Handler               /* Reset Handler */
-    .long   NMI_Handler                 /* NMI Handler */
-    .long   HardFault_Handler           /* Hard Fault Handler */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   SVC_Handler                 /* SVCall Handler */
-    .long   0                           /* Reserved */
-    .long   0                           /* Reserved */
-    .long   PendSV_Handler              /* PendSV Handler */
-    .long   SysTick_Handler             /* SysTick Handler */
-
-  /* External Interrupts */
-    .long 	POWER_CLOCK_IRQHandler		 /*POWER_CLOCK */
-    .long 	RADIO_IRQHandler		 /*RADIO */
-    .long 	UART0_IRQHandler		 /*UART0 */
-    .long 	SPI0_TWI0_IRQHandler		 /*SPI0_TWI0 */
-    .long 	SPI1_TWI1_IRQHandler		 /*SPI1_TWI1 */
-    .long 	0		 /*Reserved */
-    .long 	GPIOTE_IRQHandler		 /*GPIOTE */
-    .long 	ADC_IRQHandler		 /*ADC */
-    .long 	TIMER0_IRQHandler		 /*TIMER0 */
-    .long 	TIMER1_IRQHandler		 /*TIMER1 */
-    .long 	TIMER2_IRQHandler		 /*TIMER2 */
-    .long 	RTC0_IRQHandler		 /*RTC0 */
-    .long 	TEMP_IRQHandler		 /*TEMP */
-    .long 	RNG_IRQHandler		 /*RNG */
-    .long 	ECB_IRQHandler		 /*ECB */
-    .long 	CCM_AAR_IRQHandler		 /*CCM_AAR */
-    .long 	WDT_IRQHandler		 /*WDT */
-    .long 	RTC1_IRQHandler		 /*RTC1 */
-    .long 	QDEC_IRQHandler		 /*QDEC */
-    .long 	LPCOMP_IRQHandler		 /*LPCOMP */
-    .long 	SWI0_IRQHandler		 /*SWI0 */
-    .long 	SWI1_IRQHandler		 /*SWI1 */
-    .long 	SWI2_IRQHandler		 /*SWI2 */
-    .long 	SWI3_IRQHandler		 /*SWI3 */
-    .long 	SWI4_IRQHandler		 /*SWI4 */
-    .long 	SWI5_IRQHandler		 /*SWI5 */
-    .long 	0		 /*Reserved */
-    .long 	0		 /*Reserved */
-    .long 	0		 /*Reserved */
-    .long 	0		 /*Reserved */
-    .long 	0		 /*Reserved */
-    .long 	0		 /*Reserved */
-
-
-    .size    __Vectors, . - __Vectors
-
 /* Reset Handler */
 
     .equ    NRF_POWER_RAMON_ADDRESS,            0x40000524

@@ -40,6 +40,7 @@ SECTIONS
 {
 	.text :
 	{
+		. = ALIGN(2);
 		KEEP(*(.Vectors))
 		*(.text*)
 

@@ -5,6 +5,7 @@ mod busy_loop;
 mod gpio;
 mod pins;
 #[macro_use] mod serial;
+pub mod isr; // Needs to be public, otherwise linker removes symbols
 
 const PERIOD_MS: u32 = 1000;
 const ON_MS: u32 = 50;
