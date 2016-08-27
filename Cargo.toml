@@ -1,0 +1,9 @@
+[package]
+name = "microbit"
+version = "0.1.0"
+authors = ["Michael Neumann <mneumann@ntecs.de>"]
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
