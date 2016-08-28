@@ -3,7 +3,6 @@ use core::option::Option::{Some, None};
 
 extern "C" {
     fn __StackTop();
-    fn Reset_Handler();
 }
 
 // Creates a dummy exception handler (infinite loop)
@@ -16,6 +15,39 @@ macro_rules! dummy_intr_handler {
             asm!("b .");
         }
     }
+}
+
+const NRF_POWER_RAMON: *mut usize = 0x40000524 as *mut usize;
+const NRF_POWER_RAMON_RAMxON_ONMODE_Msk: usize = 0x3;
+
+// Following symbols are defined by the linker script
+extern "C" {
+    // End of code section. This is from where we want to start to copy from.
+    static __etext: *mut usize;
+
+    // Where data is copied into.
+    static __data_start__: *mut usize;
+    static __data_end__: *mut usize;
+}
+
+#[naked]
+#[no_mangle]
+pub unsafe extern "C" fn Reset_Handler() {
+    //use core::intrinsics::{volatile_load, volatile_store, copy_nonoverlapping};
+    use core::intrinsics::{volatile_load, volatile_store};
+    use core::slice::from_raw_parts_mut;
+    use core::slice::from_raw_parts;
+
+    // Turn all RAM banks on
+    volatile_store(NRF_POWER_RAMON, volatile_load(NRF_POWER_RAMON) | NRF_POWER_RAMON_RAMxON_ONMODE_Msk);
+
+    // Copy data from ROM to RAM.
+    let len = ((__data_end__ as usize) - (__data_start__ as usize)) / 4;
+    let src = from_raw_parts(__etext, len);
+    let mut dst = from_raw_parts_mut(__data_start__, len);
+    dst.copy_from_slice(src);
+
+    super::main();
 }
 
 dummy_intr_handler!(NMI_Handler);

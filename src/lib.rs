@@ -1,6 +1,6 @@
 #![no_std]
 #![feature(lang_items, asm)]
-#![feature(naked_functions, linkage)]
+#![feature(naked_functions, linkage, core_intrinsics)]
 
 extern crate rustc_builtins;
 
@@ -19,8 +19,8 @@ pub unsafe fn __aeabi_unwind_cpp_pr0() -> ()
     loop {}
 }
 
-#[no_mangle]
-pub extern fn main() -> ! {
+#[inline(never)]
+fn main() -> ! {
     serial::Serial::init();
     let row_2 = gpio::Pin::output(pins::ROW_2);
     let col_3 = gpio::Pin::output(pins::COL_3);
