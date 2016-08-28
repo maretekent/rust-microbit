@@ -2,6 +2,7 @@ GCC_ARM_PATH=/usr/local/gcc-arm-embedded-5_4-2016q2-20160622
 AS=${GCC_ARM_PATH}/bin/arm-none-eabi-as
 GCC=${GCC_ARM_PATH}/bin/arm-none-eabi-gcc
 OBJCOPY=${GCC_ARM_PATH}/bin/arm-none-eabi-objcopy
+OBJDUMP=${GCC_ARM_PATH}/bin/arm-none-eabi-objdump
 SREC_CAT=srec_cat
 
 build: target/combined.hex
@@ -43,6 +44,9 @@ target/combined.hex: target/hex contrib/BLE_BOOTLOADER_RESERVED.hex contrib/s110
 		target/hex -intel \
 		-o target/combined.hex -intel
 	ls -lah target/combined.hex
+
+dis: target/bin
+	${OBJDUMP} -d target/bin
 
 clean:
 	rm -rf target
