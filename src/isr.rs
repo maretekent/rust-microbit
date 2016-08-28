@@ -143,6 +143,12 @@ extern "C" {
 #[allow(non_upper_case_globals)]
 const ISRCount: usize = 16 + 32;
 
+#[link_section = ".stack"]
+pub static STACK: [usize; 512] = [0usize; 512];
+
+#[link_section = ".heap"]
+pub static HEAP: [usize; 512] = [0usize; 512];
+
 #[link_section = ".Vectors"]
 #[allow(non_upper_case_globals)]
 #[no_mangle]

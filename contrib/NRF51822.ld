@@ -127,6 +127,7 @@ SECTIONS
 
 	.heap (COPY):
 	{
+		. = ALIGN(3);
 		__end__ = .;
 		end = __end__;
 		*(.heap*)
@@ -138,6 +139,7 @@ SECTIONS
 	 * values to stack symbols later */
 	.stack_dummy (COPY):
 	{
+		. = ALIGN(3);
 		*(.stack*)
 	} > RAM
 

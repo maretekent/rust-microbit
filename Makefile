@@ -1,5 +1,4 @@
 GCC_ARM_PATH=/usr/local/gcc-arm-embedded-5_4-2016q2-20160622
-AS=${GCC_ARM_PATH}/bin/arm-none-eabi-as
 GCC=${GCC_ARM_PATH}/bin/arm-none-eabi-gcc
 OBJCOPY=${GCC_ARM_PATH}/bin/arm-none-eabi-objcopy
 OBJDUMP=${GCC_ARM_PATH}/bin/arm-none-eabi-objdump
@@ -22,18 +21,10 @@ target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib:
 target/cortex-m0/release/libmicrobit.a: target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib .FORCE
 	@RUSTFLAGS='--sysroot=target/sysroot' cargo build --target cortex-m0 --release --verbose
 	
-target/startup_NRF51822.o: contrib/startup_NRF51822.S
-	${AS} \
-		-mcpu=cortex-m0 \
-		-mthumb \
-		contrib/startup_NRF51822.S \
-		-o target/startup_NRF51822.o
-
-target/bin: target/cortex-m0/release/libmicrobit.a contrib/NRF51822.ld target/startup_NRF51822.o
+target/bin: target/cortex-m0/release/libmicrobit.a contrib/NRF51822.ld
 	${LD} \
 		--gc-sections \
 		-Tcontrib/NRF51822.ld \
-		target/startup_NRF51822.o \
 		target/cortex-m0/release/libmicrobit.a \
 		-o target/bin
 
