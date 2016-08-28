@@ -3,14 +3,24 @@ AS=${GCC_ARM_PATH}/bin/arm-none-eabi-as
 GCC=${GCC_ARM_PATH}/bin/arm-none-eabi-gcc
 OBJCOPY=${GCC_ARM_PATH}/bin/arm-none-eabi-objcopy
 OBJDUMP=${GCC_ARM_PATH}/bin/arm-none-eabi-objdump
+LD=${GCC_ARM_PATH}/bin/arm-none-eabi-ld
 SREC_CAT=srec_cat
+FETCH=fetch
 
 build: target/combined.hex
 
 .FORCE:
 
-target/cortex-m0/release/libmicrobit.a: .FORCE
-	@cargo build --target cortex-m0 --release --verbose
+target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib:
+	mkdir -p target/sysroot/lib/rustlib/cortex-m0/lib
+	test -f target/rustc-1.11.0-src.tar.gz || (cd target && ${FETCH} https://static.rust-lang.org/dist/rustc-1.11.0-src.tar.gz)
+	test -d target/rustc-1.11.0 || (cd target && tar xvzf rustc-1.11.0-src.tar.gz)
+	cp cortex-m0.json target/rustc-1.11.0/src/libcore
+	cd target/rustc-1.11.0/src/libcore && RUSTFLAGS='-C panic=abort' cargo build --target cortex-m0 --release
+	cp target/rustc-1.11.0/src/libcore/target/cortex-m0/release/libcore.rlib target/sysroot/lib/rustlib/cortex-m0/lib
+
+target/cortex-m0/release/libmicrobit.a: target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib .FORCE
+	@RUSTFLAGS='--sysroot=target/sysroot' cargo build --target cortex-m0 --release --verbose
 	
 target/startup_NRF51822.o: contrib/startup_NRF51822.S
 	${AS} \
@@ -20,18 +30,11 @@ target/startup_NRF51822.o: contrib/startup_NRF51822.S
 		-o target/startup_NRF51822.o
 
 target/bin: target/cortex-m0/release/libmicrobit.a contrib/NRF51822.ld target/startup_NRF51822.o
-	${GCC} \
-		-mcpu=cortex-m0 \
-		-mthumb \
-		-Wl,--gc-sections \
+	${LD} \
+		--gc-sections \
 		-Tcontrib/NRF51822.ld \
 		target/startup_NRF51822.o \
 		target/cortex-m0/release/libmicrobit.a \
-		-Wl,--start-group \
-		-lnosys \
-		-lgcc \
-		-lc \
-		-Wl,--end-group \
 		-o target/bin
 
 target/hex: target/bin
