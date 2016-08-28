@@ -7,3 +7,4 @@ authors = ["Michael Neumann <mneumann@ntecs.de>"]
 crate-type = ["staticlib"]
 
 [dependencies]
+rust-libcore = "0.0.3"

@@ -9,7 +9,7 @@ build: target/combined.hex
 .FORCE:
 
 target/cortex-m0/release/libmicrobit.a: .FORCE
-	@RUSTFLAGS='--sysroot ./sysroot' cargo build --target cortex-m0 --release --verbose
+	@cargo build --target cortex-m0 --release --verbose
 	
 target/startup_NRF51822.o: contrib/startup_NRF51822.S
 	${AS} \
