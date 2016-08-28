@@ -1,43 +1,113 @@
 use core::option::Option;
 use core::option::Option::{Some, None};
 
-extern {
+extern "C" {
     fn __StackTop();
     fn Reset_Handler();
-    fn NMI_Handler();
-    fn HardFault_Handler();
-    fn SVC_Handler();
-    fn PendSV_Handler();
-    fn SysTick_Handler();
-
-    // External interrupts
-    fn POWER_CLOCK_IRQHandler();
-    fn RADIO_IRQHandler();
-    fn UART0_IRQHandler();
-    fn SPI0_TWI0_IRQHandler();
-    fn SPI1_TWI1_IRQHandler();
-    fn GPIOTE_IRQHandler();
-    fn ADC_IRQHandler();
-    fn TIMER0_IRQHandler();
-    fn TIMER1_IRQHandler();
-    fn TIMER2_IRQHandler();
-    fn RTC0_IRQHandler();
-    fn TEMP_IRQHandler();
-    fn RNG_IRQHandler();
-    fn ECB_IRQHandler();
-    fn CCM_AAR_IRQHandler();
-    fn WDT_IRQHandler();
-    fn RTC1_IRQHandler();
-    fn QDEC_IRQHandler();
-    fn LPCOMP_IRQHandler();
-    fn SWI0_IRQHandler();
-    fn SWI1_IRQHandler();
-    fn SWI2_IRQHandler();
-    fn SWI3_IRQHandler();
-    fn SWI4_IRQHandler();
-    fn SWI5_IRQHandler();
 }
 
+// Creates a dummy exception handler (infinite loop)
+macro_rules! dummy_intr_handler {
+    ( $name:ident ) => {
+        #[linkage = "weak"]
+        #[naked]
+        #[no_mangle]
+        pub unsafe extern "C" fn $name() {
+            asm!("b .");
+        }
+    }
+}
+
+dummy_intr_handler!(NMI_Handler);
+dummy_intr_handler!(HardFault_Handler);
+dummy_intr_handler!(SVC_Handler);
+dummy_intr_handler!(PendSV_Handler);
+dummy_intr_handler!(SysTick_Handler);
+
+#[naked]
+#[no_mangle]
+pub unsafe extern "C" fn Default_Handler() {
+    asm!("b .");
+}
+
+extern "C" {
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn POWER_CLOCK_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn RADIO_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn UART0_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SPI0_TWI0_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SPI1_TWI1_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn GPIOTE_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn ADC_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn TIMER0_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn TIMER1_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn TIMER2_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn RTC0_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn TEMP_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn RNG_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn ECB_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn CCM_AAR_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn WDT_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn RTC1_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn QDEC_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn LPCOMP_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SWI0_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SWI1_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SWI2_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SWI3_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SWI4_IRQHandler();
+    #[linkage = "weak"]
+    #[link_name = "Default_Handler"]
+    fn SWI5_IRQHandler();
+}
+ 
 #[allow(non_upper_case_globals)]
 const ISRCount: usize = 16 + 32;
 
