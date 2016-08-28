@@ -1,8 +1,6 @@
-GCC_ARM_PATH=/usr/local/gcc-arm-embedded-5_4-2016q2-20160622
-GCC=${GCC_ARM_PATH}/bin/arm-none-eabi-gcc
-OBJCOPY=${GCC_ARM_PATH}/bin/arm-none-eabi-objcopy
-OBJDUMP=${GCC_ARM_PATH}/bin/arm-none-eabi-objdump
-LD=${GCC_ARM_PATH}/bin/arm-none-eabi-ld
+OBJCOPY=objcopy
+OBJDUMP=llvm-objdump38
+LD=/usr/local/gcc-arm-embedded-5_4-2016q2-20160622/bin/arm-none-eabi-ld
 SREC_CAT=srec_cat
 FETCH=fetch
 
@@ -21,12 +19,13 @@ target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib:
 target/cortex-m0/release/libmicrobit.a: target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib .FORCE
 	@RUSTFLAGS='--sysroot=target/sysroot' cargo build --target cortex-m0 --release --verbose
 	
-target/bin: target/cortex-m0/release/libmicrobit.a contrib/NRF51822.ld
+target/bin: target/cortex-m0/release/libmicrobit.a linker.ld Makefile
 	${LD} \
 		--gc-sections \
-		-Tcontrib/NRF51822.ld \
-		target/cortex-m0/release/libmicrobit.a \
-		-o target/bin
+		-T linker.ld \
+		-o target/bin \
+		--verbose \
+		target/cortex-m0/release/libmicrobit.a
 
 target/hex: target/bin
 	${OBJCOPY} -O ihex target/bin target/hex
