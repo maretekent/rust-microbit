@@ -3,6 +3,8 @@ OBJDUMP=llvm-objdump38
 LD=/usr/local/gcc-arm-embedded-5_4-2016q2-20160622/bin/arm-none-eabi-ld
 SREC_CAT=srec_cat
 FETCH=fetch
+SERNO?=9900000037024e45006620080000004e0000000097969901
+MNT=/mnt
 
 build: target/combined.hex
 
@@ -38,7 +40,18 @@ target/combined.hex: target/hex contrib/BLE_BOOTLOADER_RESERVED.hex contrib/s110
 		-o target/combined.hex -intel
 	ls -lah target/combined.hex
 
-dis: target/bin
+flash:
+	test -f target/combined.hex
+	mount -t msdos /dev/serno/${SERNO} ${MNT}
+	test -f ${MNT}/details.txt
+	cp target/combined.hex ${MNT}
+	umount ${MNT}
+	echo "Successfully flashed"
+
+serial:
+	cat /dev/ttyU0
+
+diss: target/bin
 	${OBJDUMP} -d target/bin
 
 clean:
