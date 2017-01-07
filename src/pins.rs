@@ -1,7 +1,7 @@
 //! BBC micro:bit pins.
 //!
 //! Constant names: what a pin is connected to.
-//! Constant value: pin number in the Nordic micro-controller’s memory mapping,
+//! Constant value: pin number in the Nordic micro-controller's memory mapping,
 //! for use with `gpio::Pin::new`.
 
 #![allow(dead_code)]

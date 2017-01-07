@@ -42,7 +42,7 @@ target/combined.hex: target/hex contrib/BLE_BOOTLOADER_RESERVED.hex contrib/s110
 		contrib/s110_nrf51822_8.0.0_softdevice.hex -intel \
 		target/hex -intel \
 		-o target/combined.hex -intel
-	ls -lah target/combined.hex
+	ls -la target/combined.hex
 
 flash:
 	test -f target/combined.hex

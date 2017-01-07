@@ -26,9 +26,16 @@ fn main() -> ! {
     let row_2 = gpio::Pin::output(pins::ROW_2);
     let col_3 = gpio::Pin::output(pins::COL_3);
     row_2.set_high();
+
+    let btn_a = gpio::Pin::input(pins::BUTTON_A);
+
     let mut uptime: u32 = 0;
     loop {
         println!("Uptime: {}", uptime);
+
+        // Button is low-active
+        println!("Button A pressed: {}", btn_a.is_low());
+
         uptime += 1;
         col_3.set_low();
         busy_loop::wait_approx_ms(ON_MS);
