@@ -20,30 +20,6 @@ pub unsafe fn __aeabi_unwind_cpp_pr0() -> ()
     loop {}
 }
 
-#[inline(never)]
-fn main() -> ! {
-    serial::Serial::init();
-    let row_2 = gpio::Pin::output(pins::ROW_2);
-    let col_3 = gpio::Pin::output(pins::COL_3);
-    row_2.set_high();
-
-    let btn_a = gpio::Pin::input(pins::BUTTON_A);
-
-    let mut uptime: u32 = 0;
-    loop {
-        println!("Uptime: {}", uptime);
-
-        // Button is low-active
-        println!("Button A pressed: {}", btn_a.is_low());
-
-        uptime += 1;
-        col_3.set_low();
-        busy_loop::wait_approx_ms(ON_MS);
-        col_3.set_high();
-        busy_loop::wait_approx_ms(PERIOD_MS - ON_MS);
-    }
-}
-
 #[lang = "panic_fmt"]
 extern fn panic_fmt(details: ::core::fmt::Arguments, file: &'static str, line: u32) -> ! {
     println!("Panic at {}:{}, {}", file, line, details);
@@ -59,3 +35,29 @@ extern fn panic_fmt(details: ::core::fmt::Arguments, file: &'static str, line: u
 }
 
 #[lang = "eh_personality"] extern fn eh_personality() {}
+
+#[inline(never)] // Keep this!
+fn main() {
+    serial::Serial::init();
+    let row_2 = gpio::Pin::output(pins::ROW_2);
+    let col_3 = gpio::Pin::output(pins::COL_3);
+    row_2.set_high();
+
+    let btn_a = gpio::Pin::input(pins::BUTTON_A);
+    let btn_b = gpio::Pin::input(pins::BUTTON_B);
+
+    let mut uptime: u32 = 0;
+    loop {
+        println!("Uptime: {}", uptime);
+
+        // Button is low-active
+        println!("Button A pressed: {}", btn_a.is_low());
+        println!("Button B pressed: {}", btn_b.is_low());
+
+        uptime += 1;
+        col_3.set_low();
+        busy_loop::wait_approx_ms(ON_MS);
+        col_3.set_high();
+        busy_loop::wait_approx_ms(PERIOD_MS - ON_MS);
+    }
+}

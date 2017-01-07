@@ -33,7 +33,6 @@ extern "C" {
 #[naked]
 #[no_mangle]
 pub unsafe extern "C" fn Reset_Handler() {
-    //use core::intrinsics::{volatile_load, volatile_store, copy_nonoverlapping};
     use core::intrinsics::{volatile_load, volatile_store};
     use core::slice::from_raw_parts_mut;
     use core::slice::from_raw_parts;
