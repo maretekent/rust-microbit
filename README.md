@@ -10,16 +10,16 @@ work. Most code is stolen from there.
 
 We need the following packages:
 
-    pkg ins llvm38 gcc-arm-embedded srecord
+    pkg ins llvm39 gcc-arm-embedded srecord
 
 Note that I am trying hard to remove the dependency on `gcc`. Right now it is
 only required for linking.
 
-You need a development version of Rust 1.11 to be able to compile `libcore`.
+You need a development version of Rust 1.15 to be able to compile `libcore`.
 Basically on DragonFly this means that you have to compile Rust and Cargo from
 source. I use the following version:
 
-    rustc 1.11.0-dev (55e84396e 2016-08-06)
+    rustc 1.15.0-dev (d14d74d5f 2016-12-04)
 
 I am using `rustup`, so I set `rustup default /usr/local/my-version-of-rust`.
 
@@ -38,5 +38,12 @@ has a different serial number, so you may want to change the Makefile in this re
 
 Finally, you can connect to the serial console:
 
-    # as root
+    # as root (or user tty, see below)
     make serial
+
+On BSD, add the following line to /etc/devfs.conf:
+
+    perm    ttyU*   root:tty        0660
+
+And add yourself to the group ```tty```. Then you don't need to be root
+or use ```sudo```.

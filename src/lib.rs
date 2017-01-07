@@ -1,8 +1,9 @@
 #![no_std]
 #![feature(lang_items, asm)]
 #![feature(naked_functions, linkage, core_intrinsics)]
+#![feature(compiler_builtins_lib)]
 
-extern crate rustc_builtins;
+extern crate compiler_builtins;
 
 mod busy_loop;
 mod gpio;
