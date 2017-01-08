@@ -1,5 +1,11 @@
+use core::ptr::read_volatile;
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct PinNumber(pub u8);
+
+const CONFIG_INPUT: u32 = 0 << 0;
+const CONFIG_OUTPUT: u32 = 1 << 0;
+const CONFIG_PULLUP: u32 = 3 << 2;
 
 impl PinNumber {
 
@@ -34,6 +40,8 @@ pub struct Pin {
     mask: u32,
 }
 
+// TODO: Use a trait to abstract In/Out
+
 impl Pin {
     pub fn input(number: PinNumber) -> Self {
         number.input();
@@ -62,8 +70,8 @@ impl Pin {
     }
 
     pub fn is_high(&self) -> bool {
-        let reg = unsafe { (*GPIO_BASE).IN };
-	(reg & self.mask) == self.mask
+        let reg = unsafe { read_volatile(&(*GPIO_BASE).IN) };
+	    (reg & self.mask) == self.mask
     }
 
     pub fn is_low(&self) -> bool {
@@ -71,10 +79,6 @@ impl Pin {
     }
 }
 
-
-const CONFIG_INPUT: u32 = 0 << 0;
-const CONFIG_OUTPUT: u32 = 1 << 0;
-const CONFIG_PULLUP: u32 = 3 << 2;
 
 const GPIO_BASE: *mut NRF_GPIO_Type = 0x50000000 as *mut _;
 

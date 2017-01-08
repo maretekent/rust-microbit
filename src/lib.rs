@@ -11,6 +11,7 @@ mod pins;
 #[macro_use] mod serial;
 pub mod isr; // Needs to be public, otherwise linker removes symbols
 pub mod display;
+pub mod adc;
 
 const PERIOD_MS: u32 = 1000;
 const ON_MS: u32 = 50;
@@ -58,11 +59,21 @@ fn main() {
     serial::Serial::init();
 
     for _ in 0..10 {
-        led_lights(10);
+        led_lights(5);
     }
 
     let btn_a = gpio::Pin::input(pins::BUTTON_A);
     let btn_b = gpio::Pin::input(pins::BUTTON_B);
+
+
+    // adc. We use pins::P0. touch it!
+    adc::adc_init();
+
+    while btn_a.is_high() {
+        let value = adc::adc_read();
+        println!("{}", value);
+        busy_loop::wait_approx_ms(100);
+    }
 
     let mut uptime: u32 = 0;
     let row_2 = gpio::Pin::output(pins::ROW_2);

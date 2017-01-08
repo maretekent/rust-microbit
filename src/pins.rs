@@ -9,9 +9,13 @@
 use gpio::PinNumber;
 
 // On the edge connector
-pub const P0: PinNumber = PinNumber(3);
-pub const P1: PinNumber = PinNumber(2);
-pub const P2: PinNumber = PinNumber(1);
+pub const PAD1: PinNumber = PinNumber(3);  // left most pad (ANALOG/DIGITAL)
+pub const PAD2: PinNumber = PinNumber(2);  // middle pad (ANALOG/DIGITAL)
+pub const PAD3: PinNumber = PinNumber(1);  // right most pad (ANALOG/DIGITAL)
+
+pub const P0: PinNumber = PinNumber(3);  // left most pad (ANALOG/DIGITAL)
+pub const P1: PinNumber = PinNumber(2);  // middle pad (ANALOG/DIGITAL)
+pub const P2: PinNumber = PinNumber(1);  // right most pad (ANALOG/DIGITAL)
 pub const P3: PinNumber = PinNumber(4);  // COL_1 (ANALOG/DIGITAL)
 pub const P4: PinNumber = PinNumber(5);  // COL_2 (ANALOG/DIGITAL)
 pub const P5: PinNumber = PinNumber(17);  // BTN_A
