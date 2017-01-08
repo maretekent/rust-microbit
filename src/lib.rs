@@ -67,10 +67,12 @@ fn main() {
 
 
     // adc. We use pins::P0. touch it!
-    adc::adc_init();
+    let adc_p0 = adc::ADC::new(pins::P0).unwrap();
+
+    adc_p0.init();
 
     while btn_a.is_high() {
-        let value = adc::adc_read();
+        let value = adc_p0.read();
         println!("{}", value);
         busy_loop::wait_approx_ms(100);
     }

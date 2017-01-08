@@ -1,6 +1,7 @@
 #![allow(dead_code, non_upper_case_globals, non_camel_case_types)]
 
 use gpio::PinNumber;
+use pins::{P0, P1, P2, P3, P4, P10};
 use core::ptr::read_volatile;
 
 #[allow(non_snake_case)]
@@ -68,6 +69,7 @@ enum ADC_CONFIG_REFSEL {
 const ADC_CONFIG_PSEL_Pos: u32 = 8; // Position of PSEL field.
 const ADC_CONFIG_PSEL_Msk: u32 = 0xFF << ADC_CONFIG_PSEL_Pos; // Bit mask of PSEL field.
 #[repr(u32)]
+#[derive(Copy, Clone)]
 enum ADC_CONFIG_PSEL {
     Disabled = 0,       // Analog input pins disabled.
     AnalogInput0 = 1,   // Use analog input 0 as analog input.
@@ -94,6 +96,46 @@ const NRF_ADC_BASE: *mut NRF_ADC_Type = 0x40007000 as *mut _;
 
 const ADC0_0: *mut NRF_ADC_Type = NRF_ADC_BASE;
 
+pub struct ADC {
+    adc: *mut NRF_ADC_Type,
+    analog_input_pin: ADC_CONFIG_PSEL
+}
+
+impl ADC {
+    // Returns None, in case there is no analog input pin available for the given `pin`.
+    pub fn new(pin: PinNumber) -> Option<ADC> {
+        if let Some(analog_input_pin) = ADC::map_pin(pin) {
+            Some(ADC {
+                adc: ADC0_0,
+                analog_input_pin: analog_input_pin
+            })
+        }
+        else {
+            None
+        }
+    }
+
+    pub fn init(&self) {
+        init_adc(self.adc, self.analog_input_pin);
+    }
+
+    pub fn read(&self) -> u16 {
+        read_adc(self.adc, self.analog_input_pin)
+    }
+
+    fn map_pin(pin: PinNumber) -> Option<ADC_CONFIG_PSEL> {
+        match pin {
+            P2  => Some(ADC_CONFIG_PSEL::AnalogInput2),
+            P1  => Some(ADC_CONFIG_PSEL::AnalogInput3),
+            P0  => Some(ADC_CONFIG_PSEL::AnalogInput4),
+            P3  => Some(ADC_CONFIG_PSEL::AnalogInput5),
+            P4  => Some(ADC_CONFIG_PSEL::AnalogInput6),
+            P10 => Some(ADC_CONFIG_PSEL::AnalogInput7),
+            _ => None,
+        }
+    }
+}
+
 fn init_adc(adc: *mut NRF_ADC_Type, analog_input_pin: ADC_CONFIG_PSEL) {
     unsafe {
         (*adc).ENABLE = ADC_ENABLE_ENABLE_Enabled;
@@ -117,18 +159,4 @@ fn read_adc(adc: *mut NRF_ADC_Type, analog_input_pin: ADC_CONFIG_PSEL) -> u16 {
 
         read_volatile(&(*adc).RESULT) as u16
     }
-}
-
-pub fn adc_init() {
-    // pin 1, 4, P2
-    // pin 2, 8, P1
-    // pin 3, 16, P0
-    // pin 4, 32, P3
-    // pin 5, 64, P4
-    // pin 6, 128, P10
-    init_adc(ADC0_0, ADC_CONFIG_PSEL::AnalogInput4);
-}
-
-pub fn adc_read() -> u16 {
-    read_adc(ADC0_0, ADC_CONFIG_PSEL::AnalogInput4)
 }
