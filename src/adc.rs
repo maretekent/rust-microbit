@@ -1,3 +1,5 @@
+#![allow(dead_code, non_upper_case_globals, non_camel_case_types)]
+
 use gpio::PinNumber;
 use core::ptr::read_volatile;
 
