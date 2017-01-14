@@ -1,7 +1,6 @@
 OBJCOPY=objcopy
 OBJDUMP=llvm-objdump39
 LD=/usr/local/gcc-arm-embedded-5_4-2016q3-20160926/bin/arm-none-eabi-ld
-SREC_CAT=srec_cat
 FETCH=fetch
 SERNO?=9900000037024e45006620080000004e0000000097969901
 TTY?=/dev/ttyU0
@@ -36,12 +35,8 @@ target/bin: target/cortex-m0/release/libmicrobit.a linker.ld Makefile
 target/hex: target/bin
 	${OBJCOPY} -O ihex target/bin target/hex
 
-target/combined.hex: target/hex contrib/BLE_BOOTLOADER_RESERVED.hex contrib/s110_nrf51822_8.0.0_softdevice.hex
-	${SREC_CAT} \
-		contrib/BLE_BOOTLOADER_RESERVED.hex -intel \
-		contrib/s110_nrf51822_8.0.0_softdevice.hex -intel \
-		target/hex -intel \
-		-o target/combined.hex -intel
+target/combined.hex: target/hex
+	cp target/hex target/combined.hex
 	ls -la target/combined.hex
 
 flash:

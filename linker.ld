@@ -3,7 +3,7 @@ OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(Reset_Handler)
 
 SECTIONS {
-    __FLASH_ORIGIN = 0x00018000;
+    __FLASH_ORIGIN = 0x00000000;
     __FLASH_SIZE = 0x28000;
     __RAM_ORIGIN = 0x20002000;
     __RAM_SIZE = 0x2000;

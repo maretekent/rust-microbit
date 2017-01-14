@@ -27,7 +27,7 @@ Currently there is code that supports the following peripherals:
 
 We need the following packages:
 
-    pkg ins llvm39 gcc-arm-embedded srecord
+    pkg ins llvm39 gcc-arm-embedded
 
 Note that I am trying hard to remove the dependency on `gcc`. Right now it is
 only required for linking.
