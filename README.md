@@ -25,23 +25,24 @@ Currently there is code that supports the following peripherals:
 
 ### DragonFly
 
-We need the following packages:
+I have DragonFly 4.9-DEVELOPMENT running and need the following packages:
 
-    pkg ins llvm39 gcc-arm-embedded
+    pkg ins llvm40 arm-none-eabi-gcc
 
 Note that I am trying hard to remove the dependency on `gcc`. Right now it is
 only required for linking.
 
-You need a development version of Rust 1.15 to be able to compile `libcore`.
+You need a development version of Rust 1.16 to be able to compile `libcore`.
 Basically on DragonFly this means that you have to compile Rust and Cargo from
-source. I use the following version:
+source. I use the following versions:
 
-    rustc 1.15.0-dev (d14d74d5f 2016-12-04)
+    rustc 1.16.0-dev (30cf806ef 2017-03-10)
+    cargo 0.19.0-dev (0f697fac 2017-04-08)
 
 I am using `rustup`, so I set `rustup default /usr/local/my-version-of-rust`.
 
 The Makefile I am using is adapted to my machine. You probably want to modify
-it matching your paths.
+the `config.mk` file to match your paths.
 
 Once everything is installed, you should be able to produce a hex file using
 

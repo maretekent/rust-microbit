@@ -22,7 +22,9 @@ pub unsafe fn __aeabi_unwind_cpp_pr0() -> ()
     loop {}
 }
 
+#[allow(private_no_mangle_fns)]
 #[lang = "panic_fmt"]
+#[no_mangle]
 extern fn panic_fmt(details: ::core::fmt::Arguments, file: &'static str, line: u32) -> ! {
     println!("Panic at {}:{}, {}", file, line, details);
     let row_2 = ::gpio::Pin::output(::pins::ROW_2);
