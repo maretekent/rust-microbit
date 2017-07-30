@@ -11,5 +11,6 @@
     "llvm-target": "thumbv6m-none-eabi",
     "features": "+strict-align",
     "relocation-model": "static",
-    "no-compiler-rt": true
+    "no-compiler-rt": true,
+    "linker-flavor": "ld"
 }

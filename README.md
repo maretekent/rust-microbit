@@ -32,14 +32,14 @@ I have DragonFly 4.9-DEVELOPMENT running and need the following packages:
 Note that I am trying hard to remove the dependency on `gcc`. Right now it is
 only required for linking.
 
-You need a development version of Rust 1.16 to be able to compile `libcore`.
+You need a development version of Rust 1.19 to be able to compile `libcore`.
 Basically on DragonFly this means that you have to compile Rust and Cargo from
 source. I use the following versions:
 
-    rustc 1.16.0-dev (30cf806ef 2017-03-10)
-    cargo 0.19.0-dev (0f697fac 2017-04-08)
+    rustc 1.19.0-dev
+    cargo 0.20.0-dev
 
-I am using `rustup`, so I set `rustup default /usr/local/my-version-of-rust`.
+I am using `rustup`, so I set `rustup default /usr/local/rust-1.19.0-dev`.
 
 The Makefile I am using is adapted to my machine. You probably want to modify
 the `config.mk` file to match your paths.

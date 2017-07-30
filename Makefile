@@ -1,6 +1,6 @@
 .include "config.mk"
 
-RUST_VERSION=1.16.0
+RUST_VERSION=1.19.0
 
 # This is where the cortex-m0.json file is located
 RUST_TARGET_PATH=${PWD}
