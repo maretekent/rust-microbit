@@ -6,12 +6,6 @@ authors = ["Michael Neumann <mneumann@ntecs.de>"]
 [lib]
 crate-type = ["staticlib"]
 
-[profile.dev]
-panic = "abort"
-
-[profile.release]
-panic = "abort"
-
 [dependencies.compiler_builtins]
 git = "https://github.com/rust-lang-nursery/compiler-builtins"
 features = ["mem"]

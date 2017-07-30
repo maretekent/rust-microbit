@@ -10,5 +10,6 @@
     "features": "+strict-align",
     "relocation-model": "static",
     "no-compiler-rt": true,
-    "linker-flavor": "ld"
+    "linker-flavor": "ld",
+    "panic-strategy": "abort"
 }

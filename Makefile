@@ -14,11 +14,11 @@ target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib:
 	mkdir -p target/sysroot/lib/rustlib/cortex-m0/lib
 	test -f target/rustc-${RUST_VERSION}-src.tar.gz || (cd target && ${FETCH} https://static.rust-lang.org/dist/rustc-${RUST_VERSION}-src.tar.gz)
 	test -d target/rustc-${RUST_VERSION}-src || (cd target && tar xvzf rustc-${RUST_VERSION}-src.tar.gz)
-	cd target/rustc-${RUST_VERSION}-src/src/libcore && RUSTFLAGS='-C panic=abort -C opt-level=3' cargo build --target cortex-m0 --release
+	cd target/rustc-${RUST_VERSION}-src/src/libcore && RUSTFLAGS='-C opt-level=3' cargo build --target cortex-m0 --release
 	cp target/rustc-${RUST_VERSION}-src/src/target/cortex-m0/release/libcore.rlib target/sysroot/lib/rustlib/cortex-m0/lib
 
 target/cortex-m0/release/libmicrobit.a: target/sysroot/lib/rustlib/cortex-m0/lib/libcore.rlib .FORCE
-	@RUSTFLAGS='--sysroot=target/sysroot -C opt-level=3 -C panic=abort' cargo build --target cortex-m0 --release --verbose
+	@RUSTFLAGS='--sysroot=target/sysroot -C opt-level=3' cargo build --target cortex-m0 --release --verbose
 	
 target/bin: target/cortex-m0/release/libmicrobit.a linker.ld Makefile
 	${LD} \
