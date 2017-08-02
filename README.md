@@ -41,6 +41,8 @@ source. I use the following versions:
 
 I am using `rustup`, so I set `rustup default /usr/local/rust-1.19.0-dev`.
 
+Furthermore you need [xargo]. You can install it via `cargo install xargo`.
+
 The Makefile I am using is adapted to my machine. You probably want to modify
 the `config.mk` file to match your paths.
 
@@ -65,3 +67,5 @@ On BSD, add the following line to /etc/devfs.conf:
 
 And add yourself to the group ```tty```. Then you don't need to be root
 or use ```sudo```.
+
+[xargo]: https://github.com/japaric/xargo
