@@ -1,4 +1,5 @@
 use core::ptr::read_volatile;
+use nrf51::GPIO;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct PinNumber(pub u8);
@@ -14,8 +15,43 @@ impl PinNumber {
     }
 
     fn configure(&self, cfg: u32) {
+        // XXX: Can we solve that better?
         unsafe {
-            (*GPIO_BASE).PIN_CNF[self.0 as usize] = cfg;
+            match (self.0) {
+                 0 => (*GPIO.get()).pin_cnf0.write(|w| w.bits(cfg)),
+                 1 => (*GPIO.get()).pin_cnf1.write(|w| w.bits(cfg)),
+                 2 => (*GPIO.get()).pin_cnf2.write(|w| w.bits(cfg)),
+                 3 => (*GPIO.get()).pin_cnf3.write(|w| w.bits(cfg)),
+                 4 => (*GPIO.get()).pin_cnf4.write(|w| w.bits(cfg)),
+                 5 => (*GPIO.get()).pin_cnf5.write(|w| w.bits(cfg)),
+                 6 => (*GPIO.get()).pin_cnf6.write(|w| w.bits(cfg)),
+                 7 => (*GPIO.get()).pin_cnf7.write(|w| w.bits(cfg)),
+                 8 => (*GPIO.get()).pin_cnf8.write(|w| w.bits(cfg)),
+                 9 => (*GPIO.get()).pin_cnf9.write(|w| w.bits(cfg)),
+                10 => (*GPIO.get()).pin_cnf10.write(|w| w.bits(cfg)),
+                11 => (*GPIO.get()).pin_cnf11.write(|w| w.bits(cfg)),
+                12 => (*GPIO.get()).pin_cnf12.write(|w| w.bits(cfg)),
+                13 => (*GPIO.get()).pin_cnf13.write(|w| w.bits(cfg)),
+                14 => (*GPIO.get()).pin_cnf14.write(|w| w.bits(cfg)),
+                15 => (*GPIO.get()).pin_cnf15.write(|w| w.bits(cfg)),
+                16 => (*GPIO.get()).pin_cnf16.write(|w| w.bits(cfg)),
+                17 => (*GPIO.get()).pin_cnf17.write(|w| w.bits(cfg)),
+                18 => (*GPIO.get()).pin_cnf18.write(|w| w.bits(cfg)),
+                19 => (*GPIO.get()).pin_cnf19.write(|w| w.bits(cfg)),
+                20 => (*GPIO.get()).pin_cnf20.write(|w| w.bits(cfg)),
+                21 => (*GPIO.get()).pin_cnf21.write(|w| w.bits(cfg)),
+                22 => (*GPIO.get()).pin_cnf22.write(|w| w.bits(cfg)),
+                23 => (*GPIO.get()).pin_cnf23.write(|w| w.bits(cfg)),
+                24 => (*GPIO.get()).pin_cnf24.write(|w| w.bits(cfg)),
+                25 => (*GPIO.get()).pin_cnf25.write(|w| w.bits(cfg)),
+                26 => (*GPIO.get()).pin_cnf26.write(|w| w.bits(cfg)),
+                27 => (*GPIO.get()).pin_cnf27.write(|w| w.bits(cfg)),
+                28 => (*GPIO.get()).pin_cnf28.write(|w| w.bits(cfg)),
+                29 => (*GPIO.get()).pin_cnf29.write(|w| w.bits(cfg)),
+                30 => (*GPIO.get()).pin_cnf30.write(|w| w.bits(cfg)),
+                31 => (*GPIO.get()).pin_cnf31.write(|w| w.bits(cfg)),
+                _ => panic!("Invalid pin")
+            }
         }
     }
 
@@ -40,8 +76,6 @@ pub struct Pin {
     mask: u32,
 }
 
-// TODO: Use a trait to abstract In/Out
-
 impl Pin {
     pub fn input(number: PinNumber) -> Self {
         number.input();
@@ -59,40 +93,22 @@ impl Pin {
 
     pub fn set_high(&self) {
         unsafe {
-            (*GPIO_BASE).OUTSET = self.mask
+            (*GPIO.get()).outset.write(|w| w.bits(self.mask));
         }
     }
 
     pub fn set_low(&self) {
         unsafe {
-            (*GPIO_BASE).OUTCLR = self.mask
+            (*GPIO.get()).outclr.write(|w| w.bits(self.mask));
         }
     }
 
     pub fn is_high(&self) -> bool {
-        let reg = unsafe { read_volatile(&(*GPIO_BASE).IN) };
+        let reg = unsafe { (*GPIO.get()).in_.read().bits() };
 	    (reg & self.mask) == self.mask
     }
 
     pub fn is_low(&self) -> bool {
         !self.is_high()
     }
-}
-
-
-const GPIO_BASE: *mut NRF_GPIO_Type = 0x50000000 as *mut _;
-
-#[allow(non_snake_case)]
-#[repr(C)]
-struct NRF_GPIO_Type {
-    RESERVED_0: [u32; 321],
-    OUT: u32,                               /* Write GPIO port. */
-    OUTSET: u32,                            /* Set individual bits in GPIO port. */
-    OUTCLR: u32,                            /* Clear individual bits in GPIO port. */
-    IN: u32,                                /* Read GPIO port. */
-    DIR: u32,                               /* Direction of GPIO pins. */
-    DIRSET: u32,                            /* DIR set register. */
-    DIRCLR: u32,                            /* DIR clear register. */
-    RESERVED_1: [u32; 120],
-    PIN_CNF: [u32; 32],                     /* Configuration of GPIO pins. */
 }

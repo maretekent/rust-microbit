@@ -1,0 +1,11 @@
+[package]
+name = "nrf51"
+version = "0.1.0"
+authors = ["Michael Neumann <mneumann@ntecs.de>"]
+
+[dependencies]
+
+cortex-m = "0.3"
+#cortex-m-rt = "0.3"
+bare-metal = "0.1"
+vcell = "0.1"

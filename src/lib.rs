@@ -4,6 +4,7 @@
 #![feature(compiler_builtins_lib)]
 
 extern crate compiler_builtins;
+extern crate nrf51;
 
 mod busy_loop;
 mod gpio;
