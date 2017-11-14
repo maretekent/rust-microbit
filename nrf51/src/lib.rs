@@ -1,4 +1,4 @@
-# ! [ cfg_attr ( feature = "rt" , feature ( global_asm ) ) ] # ! [ cfg_attr ( feature = "rt" , feature ( macro_reexport ) ) ] # ! [ cfg_attr ( feature = "rt" , feature ( used ) ) ] # ! [ doc = "Peripheral access API for NRF51 microcontrollers (generated using svd2rust v0.11.3)\n\nYou can find an overview of the API [here].\n\n[here]: https://docs.rs/svd2rust/0.11.3/svd2rust/#peripheral-api" ] # ! [ deny ( missing_docs ) ] # ! [ deny ( warnings ) ] # ! [ allow ( non_camel_case_types ) ] # ! [ feature ( const_fn ) ] # ! [ no_std ]extern crate cortex_m ;
+# ! [ cfg_attr ( feature = "rt" , feature ( global_asm ) ) ] # ! [ cfg_attr ( feature = "rt" , feature ( macro_reexport ) ) ] # ! [ cfg_attr ( feature = "rt" , feature ( used ) ) ] # ! [ doc = "Peripheral access API for NRF51 microcontrollers (generated using svd2rust v0.11.4)\n\nYou can find an overview of the API [here].\n\n[here]: https://docs.rs/svd2rust/0.11.4/svd2rust/#peripheral-api" ] # ! [ deny ( missing_docs ) ] # ! [ deny ( warnings ) ] # ! [ allow ( non_camel_case_types ) ] # ! [ feature ( const_fn ) ] # ! [ no_std ]extern crate cortex_m ;
 #[macro_reexport(default_handler, exception)]
 #[cfg(feature = "rt")]
 extern crate cortex_m_rt ;
@@ -13,13 +13,15 @@ pub use interrupt::Interrupt;
 pub mod interrupt {
     use bare_metal::Nr;
     #[cfg(feature = "rt")]
-    global_asm!(
-        "
-                .thumb_func
-                DH_TRAMPOLINE:
-                    b DEFAULT_HANDLER
-                "
-    );
+    extern "C" {
+        fn DEFAULT_HANDLER();
+    }
+    #[cfg(feature = "rt")]
+    #[allow(non_snake_case)]
+    #[no_mangle]
+    pub unsafe extern "C" fn DH_TRAMPOLINE() {
+        DEFAULT_HANDLER();
+    }
     #[cfg(feature = "rt")]
     global_asm!(
         "\n.weak POWER_CLOCK\nPOWER_CLOCK = DH_TRAMPOLINE\n.weak RADIO\nRADIO = DH_TRAMPOLINE\n.weak UART0\nUART0 = DH_TRAMPOLINE\n.weak SPI0_TWI0\nSPI0_TWI0 = DH_TRAMPOLINE\n.weak SPI1_TWI1\nSPI1_TWI1 = DH_TRAMPOLINE\n.weak GPIOTE\nGPIOTE = DH_TRAMPOLINE\n.weak ADC\nADC = DH_TRAMPOLINE\n.weak TIMER0\nTIMER0 = DH_TRAMPOLINE\n.weak TIMER1\nTIMER1 = DH_TRAMPOLINE\n.weak TIMER2\nTIMER2 = DH_TRAMPOLINE\n.weak RTC0\nRTC0 = DH_TRAMPOLINE\n.weak TEMP\nTEMP = DH_TRAMPOLINE\n.weak RNG\nRNG = DH_TRAMPOLINE\n.weak ECB\nECB = DH_TRAMPOLINE\n.weak CCM_AAR\nCCM_AAR = DH_TRAMPOLINE\n.weak WDT\nWDT = DH_TRAMPOLINE\n.weak RTC1\nRTC1 = DH_TRAMPOLINE\n.weak QDEC\nQDEC = DH_TRAMPOLINE\n.weak LPCOMP\nLPCOMP = DH_TRAMPOLINE\n.weak SWI0\nSWI0 = DH_TRAMPOLINE\n.weak SWI1\nSWI1 = DH_TRAMPOLINE\n.weak SWI2\nSWI2 = DH_TRAMPOLINE\n.weak SWI3\nSWI3 = DH_TRAMPOLINE\n.weak SWI4\nSWI4 = DH_TRAMPOLINE\n.weak SWI5\nSWI5 = DH_TRAMPOLINE"
