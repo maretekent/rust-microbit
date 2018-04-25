@@ -45,7 +45,7 @@ pub unsafe extern "C" fn Reset_Handler() {
     // Copy data from ROM to RAM.
     let len = ((__data_end__ as usize) - (__data_start__ as usize)) / 4;
     let src = from_raw_parts(__etext, len);
-    let mut dst = from_raw_parts_mut(__data_start__, len);
+    let dst = from_raw_parts_mut(__data_start__, len);
     dst.copy_from_slice(src);
 
     super::main();

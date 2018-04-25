@@ -1,5 +1,5 @@
 #![no_std]
-#![feature(lang_items, asm)]
+#![feature(lang_items, start, asm)]
 #![feature(naked_functions, linkage, core_intrinsics)]
 #![feature(compiler_builtins_lib)]
 
@@ -54,6 +54,11 @@ fn led_lights(wait: u32) {
             col_output.set_high();
         }
     }
+}
+
+#[start]
+fn start(_argc: isize, _argv: *const *const u8) -> isize {
+    0
 }
 
 #[inline(never)] // Keep this!

@@ -1,0 +1,8 @@
+[target.thumbv6m-none-eabi]
+runner = 'arm-none-eabi-gdb'
+
+[build]
+target = "thumbv6m-none-eabi"
+
+[profile.release]
+opt-level = 3

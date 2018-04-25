@@ -27,7 +27,7 @@ Currently there is code that supports the following peripherals:
 
 I have DragonFly 4.9-DEVELOPMENT running and need the following packages:
 
-    pkg ins llvm40 arm-none-eabi-gcc
+    pkg ins llvm40 arm-none-eabi-binutils
 
 Note that I am trying hard to remove the dependency on `gcc`. Right now it is
 only required for linking.
