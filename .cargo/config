@@ -4,5 +4,12 @@ runner = 'arm-none-eabi-gdb'
 [build]
 target = "thumbv6m-none-eabi"
 
+rustflags = [
+  "-C", "link-arg=--gc-sections",
+  "-C", "link-arg=-Tlink.x",
+  "-C", "linker=arm-none-eabi-ld",
+  "-Z", "linker-flavor=ld",
+]
+
 [profile.release]
 opt-level = 3
